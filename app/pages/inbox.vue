@@ -1,24 +1,25 @@
 <script setup lang="ts">
 import { format } from 'date-fns'
 import { tcgdb } from '~/data/tcgdb'
+import { messageSummaryCn, messageTitleCn, messageTypeLabel, sourceLabel } from '~/utils/tcg-i18n'
 
 const typeFilter = ref('all')
 const selectedMessageId = ref(tcgdb.messages[0]?.id)
 
 const typeItems = [{
-  label: 'All',
+  label: '全部',
   value: 'all'
 }, {
-  label: 'Alerts',
+  label: '提醒',
   value: 'alert'
 }, {
   label: 'TCGplayer',
   value: 'data'
 }, {
-  label: 'News',
+  label: '新闻',
   value: 'news'
 }, {
-  label: 'Social',
+  label: '社媒',
   value: 'social'
 }]
 
@@ -52,7 +53,7 @@ function messageColor(type: string) {
 }
 
 function formatDate(date: string) {
-  return format(new Date(date), 'MMM d, yyyy')
+  return format(new Date(date), 'yyyy-MM-dd')
 }
 </script>
 
@@ -64,9 +65,9 @@ function formatDate(date: string) {
     :max-size="42"
     resizable
   >
-    <UDashboardNavbar title="TCG News">
+    <UDashboardNavbar title="TCG 消息">
       <template #leading>
-        <UDashboardSidebarCollapse />
+        <UDashboardSidebarCollapse aria-label="收起侧边栏" />
       </template>
       <template #trailing>
         <UBadge :label="filteredMessages.length" variant="subtle" />
@@ -96,7 +97,7 @@ function formatDate(date: string) {
                 <UChip v-if="message.unread" />
               </div>
               <p class="mt-1 line-clamp-2 text-sm text-toned">
-                {{ message.title }}
+                {{ messageTitleCn(message) }}
               </p>
             </div>
           </div>
@@ -107,7 +108,7 @@ function formatDate(date: string) {
   </UDashboardPanel>
 
   <UDashboardPanel v-if="selectedMessage" id="news-detail">
-    <UDashboardNavbar :title="selectedMessage.title" :toggle="false">
+    <UDashboardNavbar :title="messageTitleCn(selectedMessage)" :toggle="false">
       <template #right>
         <UButton
           :to="`/customers/${selectedMessage.brandId}`"
@@ -115,7 +116,7 @@ function formatDate(date: string) {
           color="neutral"
           variant="ghost"
         >
-          Brand detail
+          品牌详情
         </UButton>
       </template>
     </UDashboardNavbar>
@@ -123,10 +124,10 @@ function formatDate(date: string) {
     <div class="flex flex-col gap-6 overflow-y-auto p-4 sm:p-6">
       <div class="flex flex-wrap items-center gap-2">
         <UBadge :color="messageColor(selectedMessage.type)" variant="subtle">
-          {{ selectedMessage.type }}
+          {{ messageTypeLabel(selectedMessage.type) }}
         </UBadge>
         <UBadge color="neutral" variant="soft">
-          {{ selectedMessage.source }}
+          {{ sourceLabel(selectedMessage.source) }}
         </UBadge>
         <UBadge color="neutral" variant="soft">
           {{ formatDate(selectedMessage.publishedAt) }}
@@ -135,7 +136,7 @@ function formatDate(date: string) {
 
       <div>
         <p class="text-sm text-muted">
-          Related brand
+          关联品牌
         </p>
         <NuxtLink :to="`/customers/${selectedMessage.brandId}`" class="mt-1 inline-flex items-center gap-2 text-xl font-semibold text-highlighted hover:text-primary">
           {{ selectedMessage.brandName }}
@@ -145,10 +146,10 @@ function formatDate(date: string) {
 
       <div class="max-w-3xl">
         <h2 class="text-2xl font-semibold text-highlighted">
-          {{ selectedMessage.title }}
+          {{ messageTitleCn(selectedMessage) }}
         </h2>
         <p class="mt-4 text-base leading-7 text-toned">
-          {{ selectedMessage.summary }}
+          {{ messageSummaryCn(selectedMessage) }}
         </p>
       </div>
 
@@ -156,8 +157,8 @@ function formatDate(date: string) {
         color="neutral"
         variant="subtle"
         icon="i-lucide-info"
-        title="MVP data note"
-        description="This inbox currently uses generated alerts from Google Trends and TCGplayer coverage. Official News and social feeds can attach to the same structure."
+        title="MVP 数据说明"
+        description="当前 Inbox 使用 Google Trends 与 TCGplayer 覆盖数据生成提醒；官网新闻和社媒源后续可接入同一结构。"
       />
     </div>
   </UDashboardPanel>

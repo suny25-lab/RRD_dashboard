@@ -1,33 +1,33 @@
 <script setup lang="ts">
 const plannedSources = [{
   name: 'Google Trends',
-  scope: 'US search heat for 51 TCG brands',
-  status: 'Connected'
+  scope: '51 个 TCG 品牌的美国搜索热度',
+  status: '已接入'
 }, {
   name: 'TCGplayer',
-  scope: 'Products, series, active coverage, and official price fields',
-  status: 'Planned'
+  scope: '产品、系列、活跃覆盖以及后续官方价格字段',
+  status: '计划接入'
 }, {
-  name: 'Official News',
-  scope: 'Official site news and brand announcements',
-  status: 'Planned'
+  name: '官网新闻',
+  scope: '官网新闻与品牌公告',
+  status: '计划接入'
 }, {
-  name: 'Social',
-  scope: 'Official social posts after source approval',
-  status: 'Reserved'
+  name: '社媒',
+  scope: '源确认后的官方社媒帖子',
+  status: '预留'
 }, {
   name: 'eBay',
-  scope: 'Listings and grading metrics',
-  status: 'Reserved'
+  scope: '刊登与评级指标',
+  status: '预留'
 }]
 </script>
 
 <template>
   <UDashboardPanel id="settings-home">
     <template #header>
-      <UDashboardNavbar title="Data Settings">
+      <UDashboardNavbar title="数据设置">
         <template #leading>
-          <UDashboardSidebarCollapse />
+          <UDashboardSidebarCollapse aria-label="收起侧边栏" />
         </template>
       </UDashboardNavbar>
     </template>
@@ -36,10 +36,10 @@ const plannedSources = [{
       <div class="max-w-5xl space-y-6">
         <div>
           <h1 class="text-2xl font-semibold text-highlighted">
-            Reserved Data Configuration
+            预留数据配置
           </h1>
           <p class="mt-2 text-sm text-muted">
-            This page is kept for source mapping and keyword configuration, but the first MVP does not connect editable settings.
+            本页保留用于数据源映射和关键词配置；首版 MVP 暂不接入可编辑设置。
           </p>
         </div>
 
@@ -54,7 +54,7 @@ const plannedSources = [{
                   {{ source.scope }}
                 </p>
               </div>
-              <UBadge :color="source.status === 'Connected' ? 'success' : 'neutral'" variant="subtle">
+              <UBadge :color="source.status === '已接入' ? 'success' : 'neutral'" variant="subtle">
                 {{ source.status }}
               </UBadge>
             </div>
@@ -65,8 +65,8 @@ const plannedSources = [{
           icon="i-lucide-info"
           color="neutral"
           variant="subtle"
-          title="Price source decision"
-          description="When price is added, use official TCGplayer price data fields. Do not infer price from unavailable eBay data."
+          title="价格源口径"
+          description="后续加入价格时，使用官方 TCGplayer price 字段；当前没有 eBay 数据，不从 eBay 推断价格。"
         />
       </div>
     </template>

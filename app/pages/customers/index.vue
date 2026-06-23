@@ -1,38 +1,39 @@
 <script setup lang="ts">
 import { tcgdb } from '~/data/tcgdb'
+import { stateLabel } from '~/utils/tcg-i18n'
 
 const search = ref('')
 const stateFilter = ref('all')
 const sortKey = ref<'rank' | 'currentHeat' | 'heatChange4w' | 'productCount' | 'seriesCount'>('rank')
 
 const stateItems = [{
-  label: 'All states',
+  label: '全部状态',
   value: 'all'
 }, {
-  label: 'Warming',
+  label: '升温',
   value: 'Warming'
 }, {
-  label: 'Stable',
+  label: '稳定',
   value: 'Stable'
 }, {
-  label: 'Cooling',
+  label: '降温',
   value: 'Cooling'
 }]
 
 const sortItems = [{
-  label: 'Heat rank',
+  label: '热度排名',
   value: 'rank'
 }, {
-  label: 'Current heat',
+  label: '当前热度',
   value: 'currentHeat'
 }, {
-  label: '4-week heat change',
+  label: '近4周热度变化',
   value: 'heatChange4w'
 }, {
-  label: 'Products',
+  label: '活跃产品',
   value: 'productCount'
 }, {
-  label: 'Series',
+  label: '活跃系列',
   value: 'seriesCount'
 }]
 
@@ -52,11 +53,11 @@ const filteredBrands = computed(() => {
 })
 
 function formatNumber(value: number) {
-  return new Intl.NumberFormat('en-US').format(Math.round(value))
+  return new Intl.NumberFormat('zh-CN').format(Math.round(value))
 }
 
 function formatSigned(value: number) {
-  return `${value > 0 ? '+' : ''}${value.toFixed(1)} pts`
+  return `${value > 0 ? '+' : ''}${value.toFixed(1)} 点`
 }
 
 function stateColor(state: string) {
@@ -67,11 +68,11 @@ function stateColor(state: string) {
 </script>
 
 <template>
-  <UDashboardPanel id="brands">
+  <UDashboardPanel id="brands" :ui="{ body: 'min-h-0 overflow-y-auto p-4 sm:p-6' }">
     <template #header>
-      <UDashboardNavbar title="TCG Brands">
+      <UDashboardNavbar title="品牌库">
         <template #leading>
-          <UDashboardSidebarCollapse />
+          <UDashboardSidebarCollapse aria-label="收起侧边栏" />
         </template>
         <template #trailing>
           <UBadge variant="subtle">
@@ -85,7 +86,7 @@ function stateColor(state: string) {
           <UInput
             v-model="search"
             icon="i-lucide-search"
-            placeholder="Search brand..."
+            placeholder="搜索品牌..."
             class="w-72"
           />
           <USelect v-model="stateFilter" :items="stateItems" class="w-36" />
@@ -95,14 +96,14 @@ function stateColor(state: string) {
     </template>
 
     <template #body>
-      <div class="overflow-hidden rounded-lg border border-default">
+      <div class="rounded-lg border border-default">
         <div class="grid grid-cols-[minmax(16rem,1.3fr)_8rem_8rem_8rem_8rem_8rem] items-center gap-4 border-b border-default bg-elevated/40 px-4 py-3 text-xs font-medium uppercase text-muted max-xl:hidden">
-          <span>Brand</span>
-          <span class="text-right">Heat</span>
-          <span class="text-right">4W Change</span>
-          <span class="text-right">Products</span>
-          <span class="text-right">Series</span>
-          <span class="text-right">State</span>
+          <span>品牌</span>
+          <span class="text-right">热度</span>
+          <span class="text-right">近4周变化</span>
+          <span class="text-right">产品</span>
+          <span class="text-right">系列</span>
+          <span class="text-right">状态</span>
         </div>
 
         <NuxtLink
@@ -118,37 +119,37 @@ function stateColor(state: string) {
                 {{ brand.name }}
               </p>
               <p class="truncate text-xs text-muted">
-                Rank #{{ brand.rank }} - {{ brand.aliases[1] }}
+                排名 #{{ brand.rank }} - {{ brand.aliases[1] }}
               </p>
             </div>
           </div>
 
           <div class="flex items-center justify-between xl:block xl:text-right">
-            <span class="text-xs text-muted xl:hidden">Heat</span>
+            <span class="text-xs text-muted xl:hidden">热度</span>
             <span class="font-semibold text-highlighted">{{ brand.currentHeat.toFixed(1) }}</span>
           </div>
 
           <div class="flex items-center justify-between xl:block xl:text-right">
-            <span class="text-xs text-muted xl:hidden">4W Change</span>
+            <span class="text-xs text-muted xl:hidden">近4周变化</span>
             <span :class="brand.heatChange4w > 0 ? 'text-success' : brand.heatChange4w < 0 ? 'text-error' : 'text-muted'" class="font-semibold">
               {{ formatSigned(brand.heatChange4w) }}
             </span>
           </div>
 
           <div class="flex items-center justify-between xl:block xl:text-right">
-            <span class="text-xs text-muted xl:hidden">Products</span>
+            <span class="text-xs text-muted xl:hidden">产品</span>
             <span>{{ formatNumber(brand.productCount) }}</span>
           </div>
 
           <div class="flex items-center justify-between xl:block xl:text-right">
-            <span class="text-xs text-muted xl:hidden">Series</span>
+            <span class="text-xs text-muted xl:hidden">系列</span>
             <span>{{ formatNumber(brand.seriesCount) }}</span>
           </div>
 
           <div class="flex items-center justify-between xl:block xl:text-right">
-            <span class="text-xs text-muted xl:hidden">State</span>
+            <span class="text-xs text-muted xl:hidden">状态</span>
             <UBadge :color="stateColor(brand.state)" variant="subtle">
-              {{ brand.state }}
+              {{ stateLabel(brand.state) }}
             </UBadge>
           </div>
         </NuxtLink>

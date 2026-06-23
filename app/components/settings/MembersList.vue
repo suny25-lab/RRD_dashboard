@@ -7,13 +7,21 @@ defineProps<{
 }>()
 
 const items = [{
-  label: 'Edit member',
+  label: '编辑成员',
   onSelect: () => console.log('Edit member')
 }, {
-  label: 'Remove member',
+  label: '移除成员',
   color: 'error' as const,
   onSelect: () => console.log('Remove member')
 }] satisfies DropdownMenuItem[]
+
+const roleItems = [{
+  label: '成员',
+  value: 'member'
+}, {
+  label: '所有者',
+  value: 'owner'
+}]
 </script>
 
 <template>
@@ -42,9 +50,8 @@ const items = [{
       <div class="flex items-center gap-3">
         <USelect
           :model-value="member.role"
-          :items="['member', 'owner']"
+          :items="roleItems"
           color="neutral"
-          :ui="{ value: 'capitalize', item: 'capitalize' }"
         />
 
         <UDropdownMenu :items="items" :content="{ align: 'end' }">

@@ -11,12 +11,12 @@ const teams = ref([{
     alt: 'TCGDB'
   }
 }, {
-  label: 'Google Trends',
+  label: 'Google Trends 热度',
   avatar: {
     alt: 'GT'
   }
 }, {
-  label: 'TCGplayer',
+  label: 'TCGplayer 数据',
   avatar: {
     alt: 'TP'
   }

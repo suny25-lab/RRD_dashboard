@@ -8,37 +8,36 @@ const state = reactive<{ [key: string]: boolean }>({
 })
 
 const sections = [{
-  title: 'Notification channels',
-  description: 'Where can we notify you?',
+  title: '通知渠道',
+  description: '希望通过哪些渠道通知？',
   fields: [{
     name: 'email',
-    label: 'Email',
-    description: 'Receive a daily email digest.'
+    label: '邮件',
+    description: '接收每日邮件摘要。'
   }, {
     name: 'desktop',
-    label: 'Desktop',
-    description: 'Receive desktop notifications.'
+    label: '桌面',
+    description: '接收桌面通知。'
   }]
 }, {
-  title: 'Account updates',
-  description: 'Receive updates about Nuxt UI.',
+  title: '账户更新',
+  description: '接收账户和系统更新。',
   fields: [{
     name: 'weekly_digest',
-    label: 'Weekly digest',
-    description: 'Receive a weekly digest of news.'
+    label: '每周摘要',
+    description: '接收每周消息摘要。'
   }, {
     name: 'product_updates',
-    label: 'Product updates',
-    description: 'Receive a monthly email with all new features and updates.'
+    label: '产品更新',
+    description: '接收每月功能更新邮件。'
   }, {
     name: 'important_updates',
-    label: 'Important updates',
-    description: 'Receive emails about important updates like security fixes, maintenance, etc.'
+    label: '重要更新',
+    description: '接收安全修复和维护等重要更新邮件。'
   }]
 }]
 
 async function onChange() {
-  // Do something with data
   console.log(state)
 }
 </script>

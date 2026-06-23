@@ -6,14 +6,14 @@ const toast = useToast()
 const open = ref(false)
 
 const links = [[{
-  label: 'Dashboard',
+  label: '首页',
   icon: 'i-lucide-chart-no-axes-combined',
   to: '/',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'News',
+  label: '消息',
   icon: 'i-lucide-inbox',
   to: '/inbox',
   badge: '16',
@@ -21,46 +21,46 @@ const links = [[{
     open.value = false
   }
 }, {
-  label: 'Brands',
+  label: '品牌',
   icon: 'i-lucide-users',
   to: '/customers',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Settings',
+  label: '设置',
   to: '/settings',
   icon: 'i-lucide-settings',
   defaultOpen: true,
   type: 'trigger',
   children: [{
-    label: 'General',
+    label: '数据源',
     to: '/settings',
     exact: true,
     onSelect: () => {
       open.value = false
     }
   }, {
-    label: 'Members',
+    label: '成员',
     to: '/settings/members',
     onSelect: () => {
       open.value = false
     }
   }, {
-    label: 'Notifications',
+    label: '通知',
     to: '/settings/notifications',
     onSelect: () => {
       open.value = false
     }
   }, {
-    label: 'Security',
+    label: '安全',
     to: '/settings/security',
     onSelect: () => {
       open.value = false
     }
   }]
 }], [{
-  label: 'Data scope',
+  label: '数据口径',
   icon: 'i-lucide-info',
   to: '/',
   onSelect: () => {
@@ -75,14 +75,14 @@ const links = [[{
 
 const groups = computed(() => [{
   id: 'links',
-  label: 'Go to',
+  label: '页面',
   items: links.flat()
 }, {
   id: 'code',
-  label: 'Repository',
+  label: '仓库',
   items: [{
     id: 'source',
-    label: 'View repository',
+    label: '查看仓库',
     icon: 'i-simple-icons-github',
     to: 'https://github.com/suny25-lab/RRD_dashboard',
     target: '_blank'
@@ -96,18 +96,18 @@ onMounted(async () => {
   }
 
   toast.add({
-    title: 'TCGDB keeps display preferences in this browser.',
+    title: 'TCGDB 会在本浏览器保存显示偏好。',
     duration: 0,
     close: false,
     actions: [{
-      label: 'Accept',
+      label: '接受',
       color: 'neutral',
       variant: 'outline',
       onClick: () => {
         cookie.value = 'accepted'
       }
     }, {
-      label: 'Opt out',
+      label: '不保存',
       color: 'neutral',
       variant: 'ghost'
     }]
@@ -130,7 +130,7 @@ onMounted(async () => {
       </template>
 
       <template #default="{ collapsed }">
-        <UDashboardSearchButton :collapsed="collapsed" class="bg-transparent ring-default" />
+        <UDashboardSearchButton label="搜索..." :collapsed="collapsed" class="bg-transparent ring-default" />
 
         <UNavigationMenu
           :collapsed="collapsed"

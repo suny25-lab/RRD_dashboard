@@ -3,8 +3,8 @@ import * as z from 'zod'
 import type { FormError } from '@nuxt/ui'
 
 const passwordSchema = z.object({
-  current: z.string().min(8, 'Must be at least 8 characters'),
-  new: z.string().min(8, 'Must be at least 8 characters')
+  current: z.string().min(8, '至少 8 个字符'),
+  new: z.string().min(8, '至少 8 个字符')
 })
 
 type PasswordSchema = z.output<typeof passwordSchema>
@@ -17,7 +17,7 @@ const password = reactive<Partial<PasswordSchema>>({
 const validate = (state: Partial<PasswordSchema>): FormError[] => {
   const errors: FormError[] = []
   if (state.current && state.new && state.current === state.new) {
-    errors.push({ name: 'new', message: 'Passwords must be different' })
+    errors.push({ name: 'new', message: '新密码不能与当前密码相同' })
   }
   return errors
 }
@@ -25,8 +25,8 @@ const validate = (state: Partial<PasswordSchema>): FormError[] => {
 
 <template>
   <UPageCard
-    title="Password"
-    description="Confirm your current password before setting a new one."
+    title="密码"
+    description="设置新密码前请确认当前密码。"
     variant="subtle"
   >
     <UForm
@@ -39,7 +39,7 @@ const validate = (state: Partial<PasswordSchema>): FormError[] => {
         <UInput
           v-model="password.current"
           type="password"
-          placeholder="Current password"
+          placeholder="当前密码"
           class="w-full"
         />
       </UFormField>
@@ -48,22 +48,22 @@ const validate = (state: Partial<PasswordSchema>): FormError[] => {
         <UInput
           v-model="password.new"
           type="password"
-          placeholder="New password"
+          placeholder="新密码"
           class="w-full"
         />
       </UFormField>
 
-      <UButton label="Update" class="w-fit" type="submit" />
+      <UButton label="更新" class="w-fit" type="submit" />
     </UForm>
   </UPageCard>
 
   <UPageCard
-    title="Account"
-    description="No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently."
+    title="账户"
+    description="不再使用时可在这里删除账户。此操作不可恢复，账户相关信息会永久删除。"
     class="bg-linear-to-tl from-error/10 from-5% to-default"
   >
     <template #footer>
-      <UButton label="Delete account" color="error" />
+      <UButton label="删除账户" color="error" />
     </template>
   </UPageCard>
 </template>

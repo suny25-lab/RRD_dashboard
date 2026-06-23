@@ -13,12 +13,12 @@ useHead({
     { rel: 'icon', href: '/favicon.ico' }
   ],
   htmlAttrs: {
-    lang: 'en'
+    lang: 'zh-CN'
   }
 })
 
-const title = 'TCGDB Dashboard'
-const description = 'A TCG market intelligence dashboard for Google Trends heat, TCGplayer coverage, brand details, and news signals.'
+const title = 'TCGDB 看板'
+const description = 'TCG 市场热度、品牌覆盖、品牌详情和消息信号看板。'
 
 useSeoMeta({
   title,

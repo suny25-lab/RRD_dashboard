@@ -85,7 +85,7 @@ const chart = computed(() => {
       class="w-full"
       :style="{ height: `${height}px` }"
       role="img"
-      aria-label="TCG trend chart"
+      aria-label="TCG 趋势图"
     >
       <g v-for="tick in chart.ticks" :key="tick.y">
         <line

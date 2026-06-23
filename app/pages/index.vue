@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { tcgdb } from '~/data/tcgdb'
+import { signalLabel, stateLabel } from '~/utils/tcg-i18n'
 
 const { isNotificationsSlideoverOpen } = useDashboard()
 
@@ -12,13 +13,13 @@ function isBrand<T>(value: T | undefined): value is T {
 const currentTop = computed(() => tcgdb.rankings.currentTop10.map(id => brandMap.value.get(id)).filter(isBrand))
 const changeWindow = ref(4)
 const changeWindowItems = [{
-  label: 'Last 4 weeks',
+  label: '近4周',
   value: 4
 }, {
-  label: 'Last 8 weeks',
+  label: '近8周',
   value: 8
 }, {
-  label: 'Last 12 weeks',
+  label: '近12周',
   value: 12
 }]
 
@@ -52,8 +53,8 @@ const comparisonGroups = computed(() => {
 const selectedGroup = ref(0)
 const relativeMode = ref(false)
 const comparisonGroupItems = computed(() => comparisonGroups.value.map((group, index) => ({
-  label: `G${index + 1}`,
-  title: `Group ${index + 1}: ${group[0]?.name} - ${group[group.length - 1]?.name}`,
+  label: `第 ${index + 1} 组`,
+  title: `第 ${index + 1} 组：${group[0]?.name} - ${group[group.length - 1]?.name}`,
   value: index
 })))
 
@@ -65,15 +66,15 @@ const comparisonSeries = computed(() => {
 })
 
 const overallSeries = computed(() => [{
-  name: 'Google Trends market search heat',
+  name: 'Google Trends 市场搜索热度',
   points: [...tcgdb.overallTrend]
 }])
 
 function formatNumber(value: number) {
-  return new Intl.NumberFormat('en-US').format(Math.round(value))
+  return new Intl.NumberFormat('zh-CN').format(Math.round(value))
 }
 
-function formatSigned(value: number, suffix = ' pts') {
+function formatSigned(value: number, suffix = ' 点') {
   return `${value > 0 ? '+' : ''}${value.toFixed(1)}${suffix}`
 }
 
@@ -91,19 +92,19 @@ function selectComparisonGroup(value: number) {
 <template>
   <UDashboardPanel id="home">
     <template #header>
-      <UDashboardNavbar title="TCGDB Dashboard" :ui="{ right: 'gap-3' }">
+      <UDashboardNavbar title="TCGDB 看板" :ui="{ right: 'gap-3' }">
         <template #leading>
-          <UDashboardSidebarCollapse />
+          <UDashboardSidebarCollapse aria-label="收起侧边栏" />
         </template>
 
         <template #trailing>
           <UBadge color="primary" variant="subtle">
-            51 brands
+            51 个品牌
           </UBadge>
         </template>
 
         <template #right>
-          <UTooltip text="Notifications" :shortcuts="['N']">
+          <UTooltip text="通知" :shortcuts="['N']">
             <UButton
               color="neutral"
               variant="ghost"
@@ -121,10 +122,10 @@ function selectComparisonGroup(value: number) {
       <UDashboardToolbar>
         <template #left>
           <UBadge variant="soft" color="neutral">
-            Latest complete week: {{ tcgdb.summary.latestCompleteWeek }}
+            最新完整周：{{ tcgdb.summary.latestCompleteWeek }}
           </UBadge>
           <UBadge variant="soft" color="neutral">
-            {{ tcgdb.summary.googleScope }}
+            美国 Google Trends，英文 cards 搜索词
           </UBadge>
         </template>
       </UDashboardToolbar>
@@ -132,39 +133,39 @@ function selectComparisonGroup(value: number) {
 
     <template #body>
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <UPageCard title="Tracked brands" icon="i-lucide-users" variant="subtle">
+        <UPageCard title="覆盖品牌数" icon="i-lucide-users" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ tcgdb.summary.brandCount }}
           </div>
           <p class="text-sm text-muted">
-            Pokemon Japan is merged into Pokemon.
+            Pokemon Japan 已合并到 Pokemon。
           </p>
         </UPageCard>
 
-        <UPageCard title="Latest complete week" icon="i-lucide-calendar-check" variant="subtle">
+        <UPageCard title="最新完整周" icon="i-lucide-calendar-check" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ tcgdb.summary.latestCompleteWeek }}
           </div>
           <p class="text-sm text-muted">
-            Heat rankings use Google Trends only.
+            热度排名仅使用 Google Trends。
           </p>
         </UPageCard>
 
-        <UPageCard title="TCGplayer products" icon="i-lucide-boxes" variant="subtle">
+        <UPageCard title="TCGplayer 产品" icon="i-lucide-boxes" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ formatNumber(tcgdb.summary.activeProducts) }}
           </div>
           <p class="text-sm text-muted">
-            Product coverage, not heat.
+            产品覆盖数据，不计入热度。
           </p>
         </UPageCard>
 
-        <UPageCard title="Active series" icon="i-lucide-layers-3" variant="subtle">
+        <UPageCard title="活跃系列" icon="i-lucide-layers-3" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ formatNumber(tcgdb.summary.activeSeries) }}
           </div>
           <p class="text-sm text-muted">
-            Series coverage from TCGplayer.
+            系列覆盖来自 TCGplayer。
           </p>
         </UPageCard>
       </div>
@@ -174,10 +175,10 @@ function selectComparisonGroup(value: number) {
           <template #header>
             <div>
               <h2 class="font-semibold text-highlighted">
-                Market Search Heat
+                市场搜索热度
               </h2>
               <p class="text-sm text-muted">
-                26-week Google Trends aggregate, normalized for display.
+                近26周 Google Trends 汇总，已归一化展示。
               </p>
             </div>
           </template>
@@ -189,10 +190,10 @@ function selectComparisonGroup(value: number) {
           <template #header>
             <div>
               <h2 class="font-semibold text-highlighted">
-                Major Changes
+                主要变化
               </h2>
               <p class="text-sm text-muted">
-                Largest Google Trends movement this cycle.
+                当前周期内 Google Trends 变化最大的品牌。
               </p>
             </div>
           </template>
@@ -208,12 +209,12 @@ function selectComparisonGroup(value: number) {
                 {{ brand.name }}
               </p>
               <p class="text-xs text-muted">
-                Main signal: {{ brand.latestSignal }}
+                主要信号：{{ signalLabel(brand.latestSignal) }}
               </p>
             </div>
             <div class="text-right">
               <UBadge :color="stateColor(brand.state)" variant="subtle">
-                {{ brand.state }}
+                {{ stateLabel(brand.state) }}
               </UBadge>
               <p class="mt-1 text-sm font-medium" :class="heatChangeFor(brand.id, changeWindow) >= 0 ? 'text-success' : 'text-error'">
                 {{ formatSigned(heatChangeFor(brand.id, changeWindow)) }}
@@ -226,11 +227,11 @@ function selectComparisonGroup(value: number) {
       <section class="space-y-4">
         <div>
           <h2 class="text-lg font-semibold text-highlighted">
-            Brand Heat Rankings
+            品牌热度排名
           </h2>
           <div class="mt-2 flex flex-wrap items-center gap-3">
             <p class="text-sm text-muted">
-              Current, rising, and falling Top 10 are shown directly. No dropdown.
+              当前热度、上升、下降 Top 10 直接展示。
             </p>
             <USelect v-model="changeWindow" :items="changeWindowItems" class="w-40" />
           </div>
@@ -240,7 +241,7 @@ function selectComparisonGroup(value: number) {
           <UCard :ui="{ body: 'divide-y divide-default p-0!' }">
             <template #header>
               <h3 class="font-semibold text-highlighted">
-                Current Heat Top 10
+                当前热度 Top 10
               </h3>
             </template>
             <NuxtLink
@@ -260,7 +261,7 @@ function selectComparisonGroup(value: number) {
           <UCard :ui="{ body: 'divide-y divide-default p-0!' }">
             <template #header>
               <h3 class="font-semibold text-highlighted">
-                Rising Heat Top 10
+                热度上升 Top 10
               </h3>
             </template>
             <NuxtLink
@@ -280,7 +281,7 @@ function selectComparisonGroup(value: number) {
           <UCard :ui="{ body: 'divide-y divide-default p-0!' }">
             <template #header>
               <h3 class="font-semibold text-highlighted">
-                Falling Heat Top 10
+                热度下降 Top 10
               </h3>
             </template>
             <NuxtLink
@@ -304,16 +305,16 @@ function selectComparisonGroup(value: number) {
       <section class="space-y-4 rounded-lg border border-default p-4">
         <div>
           <h2 class="font-semibold text-highlighted">
-            Six-Brand Trend Groups
+            六品牌对比组
           </h2>
           <p class="text-sm text-muted">
-            51 brands are forced into six-brand groups so Pokemon does not flatten the rest of the chart.
+            51 个品牌按 6 个一组强制对比，避免 Pokemon 把其他品牌压扁。
           </p>
         </div>
 
         <div class="space-y-4 pt-2">
           <div class="flex flex-wrap items-center justify-between gap-3">
-            <div class="flex max-w-full flex-wrap gap-1" role="group" aria-label="Brand comparison groups">
+            <div class="flex max-w-full flex-wrap gap-1" role="group" aria-label="品牌对比组">
               <button
                 v-for="item in comparisonGroupItems"
                 :key="item.value"
@@ -329,7 +330,7 @@ function selectComparisonGroup(value: number) {
                 {{ item.label }}
               </button>
             </div>
-            <USwitch v-model="relativeMode" label="Relative index" />
+            <USwitch v-model="relativeMode" label="相对指数" />
           </div>
 
           <TcgTrendChart :series="comparisonSeries" :relative="relativeMode" :height="340" />
@@ -339,10 +340,10 @@ function selectComparisonGroup(value: number) {
       <section class="space-y-4">
         <div>
           <h2 class="text-lg font-semibold text-highlighted">
-            Market Changes
+            市场变化
           </h2>
           <p class="text-sm text-muted">
-            Heat movement comes from Google Trends. TCGplayer fields explain product and series coverage.
+            热度变化来自 Google Trends；TCGplayer 字段用于解释产品和系列覆盖。
           </p>
         </div>
 
@@ -350,7 +351,7 @@ function selectComparisonGroup(value: number) {
           <UCard :ui="{ body: 'divide-y divide-default p-0!' }">
             <template #header>
               <h3 class="font-semibold text-highlighted">
-                Warming Fastest
+                升温最快
               </h3>
             </template>
             <NuxtLink
@@ -362,11 +363,11 @@ function selectComparisonGroup(value: number) {
               <span class="text-xs text-muted">{{ index + 1 }}</span>
               <div class="min-w-0">
                 <p class="truncate font-medium text-highlighted">{{ brand.name }}</p>
-                <p class="text-xs text-muted">Reason: Google Trends search heat</p>
+                <p class="text-xs text-muted">原因：Google Trends 搜索热度</p>
               </div>
               <div class="text-right">
                 <p class="font-semibold text-success">{{ formatSigned(heatChangeFor(brand.id, changeWindow)) }}</p>
-                <p class="text-xs text-muted">Heat {{ brand.currentHeat.toFixed(1) }}</p>
+                <p class="text-xs text-muted">热度 {{ brand.currentHeat.toFixed(1) }}</p>
               </div>
             </NuxtLink>
           </UCard>
@@ -374,7 +375,7 @@ function selectComparisonGroup(value: number) {
           <UCard :ui="{ body: 'divide-y divide-default p-0!' }">
             <template #header>
               <h3 class="font-semibold text-highlighted">
-                Cooling Fastest
+                降温最快
               </h3>
             </template>
             <NuxtLink
@@ -386,13 +387,13 @@ function selectComparisonGroup(value: number) {
               <span class="text-xs text-muted">{{ index + 1 }}</span>
               <div class="min-w-0">
                 <p class="truncate font-medium text-highlighted">{{ brand.name }}</p>
-                <p class="text-xs text-muted">Reason: Google Trends search heat</p>
+                <p class="text-xs text-muted">原因：Google Trends 搜索热度</p>
               </div>
               <div class="text-right">
                 <p :class="heatChangeFor(brand.id, changeWindow) < 0 ? 'text-error' : 'text-muted'" class="font-semibold">
                   {{ formatSigned(heatChangeFor(brand.id, changeWindow)) }}
                 </p>
-                <p class="text-xs text-muted">Heat {{ brand.currentHeat.toFixed(1) }}</p>
+                <p class="text-xs text-muted">热度 {{ brand.currentHeat.toFixed(1) }}</p>
               </div>
             </NuxtLink>
           </UCard>
@@ -400,7 +401,7 @@ function selectComparisonGroup(value: number) {
       </section>
 
       <p class="border-t border-default pt-4 text-sm text-muted">
-        Market heat reflects Google Trends search attention and TCGplayer coverage. It does not represent sales, revenue, or global market share. Current Google Trends geography is the United States.
+        市场热度反映 Google Trends 搜索关注和 TCGplayer 覆盖，不代表销量、收入或全球市场份额。当前 Google Trends 地区为美国。
       </p>
     </template>
   </UDashboardPanel>

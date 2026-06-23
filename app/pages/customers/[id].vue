@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { tcgdb } from '~/data/tcgdb'
+import { messageSummaryCn, messageTitleCn, signalLabel, sourceLabel, stateLabel } from '~/utils/tcg-i18n'
 
 const route = useRoute()
 const brandId = computed(() => String(route.params.id))
 const brand = computed(() => {
   const found = tcgdb.brands.find(item => item.id === brandId.value)
   if (!found) {
-    throw createError({ statusCode: 404, statusMessage: 'Brand not found' })
+    throw createError({ statusCode: 404, statusMessage: '未找到品牌' })
   }
   return found
 })
@@ -19,10 +20,10 @@ const trendSeries = computed(() => brand.value
   : [])
 
 function formatNumber(value: number) {
-  return new Intl.NumberFormat('en-US').format(Math.round(value))
+  return new Intl.NumberFormat('zh-CN').format(Math.round(value))
 }
 
-function formatSigned(value: number, suffix = ' pts') {
+function formatSigned(value: number, suffix = ' 点') {
   return `${value > 0 ? '+' : ''}${value.toFixed(1)}${suffix}`
 }
 
@@ -38,11 +39,11 @@ function stateColor(state: string) {
     <template #header>
       <UDashboardNavbar :title="brand.name">
         <template #leading>
-          <UDashboardSidebarCollapse />
+          <UDashboardSidebarCollapse aria-label="收起侧边栏" />
         </template>
         <template #trailing>
           <UBadge :color="stateColor(brand.state)" variant="subtle">
-            {{ brand.state }}
+            {{ stateLabel(brand.state) }}
           </UBadge>
         </template>
         <template #right>
@@ -52,7 +53,7 @@ function stateColor(state: string) {
             color="neutral"
             variant="ghost"
           >
-            Brands
+            返回品牌
           </UButton>
         </template>
       </UDashboardNavbar>
@@ -67,7 +68,7 @@ function stateColor(state: string) {
               {{ brand.name }}
             </h1>
             <p class="text-sm text-muted">
-              Rank #{{ brand.rank }} - active from {{ brand.brandActiveFrom }}
+              排名 #{{ brand.rank }} - 数据起始：{{ brand.brandActiveFrom }}
             </p>
           </div>
         </div>
@@ -84,39 +85,39 @@ function stateColor(state: string) {
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <UPageCard title="Google Trends heat" icon="i-lucide-search" variant="subtle">
+        <UPageCard title="Google Trends 热度" icon="i-lucide-search" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ brand.currentHeat.toFixed(1) }}
           </div>
           <p class="text-sm text-muted">
-            Current complete week.
+            当前完整周。
           </p>
         </UPageCard>
 
-        <UPageCard title="4-week heat change" icon="i-lucide-trending-up" variant="subtle">
+        <UPageCard title="近4周热度变化" icon="i-lucide-trending-up" variant="subtle">
           <div :class="brand.heatChange4w > 0 ? 'text-success' : brand.heatChange4w < 0 ? 'text-error' : 'text-highlighted'" class="text-3xl font-semibold">
             {{ formatSigned(brand.heatChange4w) }}
           </div>
           <p class="text-sm text-muted">
-            Google Trends only.
+            仅 Google Trends。
           </p>
         </UPageCard>
 
-        <UPageCard title="Active products" icon="i-lucide-boxes" variant="subtle">
+        <UPageCard title="活跃产品" icon="i-lucide-boxes" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ formatNumber(brand.productCount) }}
           </div>
           <p class="text-sm text-muted">
-            {{ formatSigned(brand.productChange, '%') }} latest movement.
+            {{ formatSigned(brand.productChange, '%') }} 最新变化。
           </p>
         </UPageCard>
 
-        <UPageCard title="Active series" icon="i-lucide-layers-3" variant="subtle">
+        <UPageCard title="活跃系列" icon="i-lucide-layers-3" variant="subtle">
           <div class="text-3xl font-semibold text-highlighted">
             {{ formatNumber(brand.seriesCount) }}
           </div>
           <p class="text-sm text-muted">
-            {{ formatSigned(brand.seriesChange, '%') }} latest movement.
+            {{ formatSigned(brand.seriesChange, '%') }} 最新变化。
           </p>
         </UPageCard>
       </div>
@@ -126,10 +127,10 @@ function stateColor(state: string) {
           <template #header>
             <div>
               <h2 class="font-semibold text-highlighted">
-                Brand Heat Trend
+                品牌热度趋势
               </h2>
               <p class="text-sm text-muted">
-                Weekly Google Trends search heat for {{ brand.name }}.
+                {{ brand.name }} 的周度 Google Trends 搜索热度。
               </p>
             </div>
           </template>
@@ -140,14 +141,14 @@ function stateColor(state: string) {
         <UCard :ui="{ body: 'space-y-4' }">
           <template #header>
             <h2 class="font-semibold text-highlighted">
-              Brand Information
+              品牌信息
             </h2>
           </template>
 
           <dl class="grid gap-3 text-sm">
             <div class="flex justify-between gap-4">
               <dt class="text-muted">
-                Market data products
+                有公开市场数据的产品
               </dt>
               <dd class="font-medium text-highlighted">
                 {{ formatNumber(brand.marketDataProducts) }}
@@ -155,15 +156,15 @@ function stateColor(state: string) {
             </div>
             <div class="flex justify-between gap-4">
               <dt class="text-muted">
-                Main change source
+                主要变化来源
               </dt>
               <dd class="font-medium text-highlighted">
-                {{ brand.latestSignal }}
+                {{ signalLabel(brand.latestSignal) }}
               </dd>
             </div>
             <div class="flex justify-between gap-4">
               <dt class="text-muted">
-                Rank change
+                排名变化
               </dt>
               <dd class="font-medium text-highlighted">
                 {{ brand.rankChange }}
@@ -171,10 +172,10 @@ function stateColor(state: string) {
             </div>
             <div class="flex justify-between gap-4">
               <dt class="text-muted">
-                Google scope
+                Google 地区
               </dt>
               <dd class="text-right font-medium text-highlighted">
-                United States
+                美国
               </dd>
             </div>
           </dl>
@@ -185,16 +186,16 @@ function stateColor(state: string) {
         <template #header>
           <div>
             <h2 class="font-semibold text-highlighted">
-              News and Signals
+              消息与信号
             </h2>
             <p class="text-sm text-muted">
-              Current MVP uses generated alerts from Google Trends and TCGplayer coverage.
+              当前 MVP 使用 Google Trends 与 TCGplayer 覆盖数据生成提醒。
             </p>
           </div>
         </template>
 
         <div v-if="!messages.length" class="p-6 text-sm text-muted">
-          No current News or social messages for this brand.
+          当前没有该品牌的消息或社媒提醒。
         </div>
         <NuxtLink
           v-for="message in messages"
@@ -203,10 +204,10 @@ function stateColor(state: string) {
           class="block p-4 transition hover:bg-elevated/40"
         >
           <div class="flex items-center justify-between gap-3">
-            <p class="font-medium text-highlighted">{{ message.title }}</p>
-            <UBadge variant="subtle">{{ message.source }}</UBadge>
+            <p class="font-medium text-highlighted">{{ messageTitleCn(message) }}</p>
+            <UBadge variant="subtle">{{ sourceLabel(message.source) }}</UBadge>
           </div>
-          <p class="mt-1 text-sm text-muted">{{ message.summary }}</p>
+          <p class="mt-1 text-sm text-muted">{{ messageSummaryCn(message) }}</p>
         </NuxtLink>
       </UCard>
     </template>
