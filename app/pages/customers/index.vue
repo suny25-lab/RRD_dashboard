@@ -113,7 +113,7 @@ function stateColor(state: string) {
           class="grid grid-cols-1 gap-3 border-b border-default px-4 py-4 transition last:border-b-0 hover:bg-elevated/40 xl:grid-cols-[minmax(16rem,1.3fr)_8rem_8rem_8rem_8rem_8rem] xl:items-center xl:gap-4"
         >
           <div class="flex min-w-0 items-center gap-3">
-            <UAvatar :alt="brand.name" :text="brand.logoText" size="lg" />
+            <BrandLogo :brand="brand" size="lg" />
             <div class="min-w-0">
               <p class="truncate font-medium text-highlighted">
                 {{ brand.name }}

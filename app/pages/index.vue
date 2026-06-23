@@ -204,13 +204,16 @@ function selectComparisonGroup(value: number) {
             :to="`/customers/${brand.id}`"
             class="flex items-center justify-between gap-3 p-4 transition hover:bg-elevated/40"
           >
-            <div class="min-w-0">
-              <p class="truncate font-medium text-highlighted">
-                {{ brand.name }}
-              </p>
-              <p class="text-xs text-muted">
-                主要信号：{{ signalLabel(brand.latestSignal) }}
-              </p>
+            <div class="flex min-w-0 items-center gap-3">
+              <BrandLogo :brand="brand" size="sm" />
+              <div class="min-w-0">
+                <p class="truncate font-medium text-highlighted">
+                  {{ brand.name }}
+                </p>
+                <p class="text-xs text-muted">
+                  主要信号：{{ signalLabel(brand.latestSignal) }}
+                </p>
+              </div>
             </div>
             <div class="text-right">
               <UBadge :color="stateColor(brand.state)" variant="subtle">
@@ -252,6 +255,7 @@ function selectComparisonGroup(value: number) {
             >
               <div class="flex min-w-0 items-center gap-3">
                 <span class="w-6 text-xs text-muted">{{ index + 1 }}</span>
+                <BrandLogo :brand="brand" size="xs" />
                 <span class="truncate font-medium">{{ brand.name }}</span>
               </div>
               <span class="text-lg font-semibold text-highlighted">{{ brand.currentHeat.toFixed(1) }}</span>
@@ -272,6 +276,7 @@ function selectComparisonGroup(value: number) {
             >
               <div class="flex min-w-0 items-center gap-3">
                 <span class="w-6 text-xs text-muted">{{ index + 1 }}</span>
+                <BrandLogo :brand="brand" size="xs" />
                 <span class="truncate font-medium">{{ brand.name }}</span>
               </div>
               <span class="text-success font-semibold">{{ formatSigned(heatChangeFor(brand.id, changeWindow)) }}</span>
@@ -292,6 +297,7 @@ function selectComparisonGroup(value: number) {
             >
               <div class="flex min-w-0 items-center gap-3">
                 <span class="w-6 text-xs text-muted">{{ index + 1 }}</span>
+                <BrandLogo :brand="brand" size="xs" />
                 <span class="truncate font-medium">{{ brand.name }}</span>
               </div>
               <span :class="heatChangeFor(brand.id, changeWindow) < 0 ? 'text-error' : 'text-muted'" class="font-semibold">
@@ -361,9 +367,12 @@ function selectComparisonGroup(value: number) {
               class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 p-4 transition hover:bg-elevated/40"
             >
               <span class="text-xs text-muted">{{ index + 1 }}</span>
-              <div class="min-w-0">
-                <p class="truncate font-medium text-highlighted">{{ brand.name }}</p>
-                <p class="text-xs text-muted">原因：Google Trends 搜索热度</p>
+              <div class="flex min-w-0 items-center gap-3">
+                <BrandLogo :brand="brand" size="sm" />
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-highlighted">{{ brand.name }}</p>
+                  <p class="text-xs text-muted">原因：Google Trends 搜索热度</p>
+                </div>
               </div>
               <div class="text-right">
                 <p class="font-semibold text-success">{{ formatSigned(heatChangeFor(brand.id, changeWindow)) }}</p>
@@ -385,9 +394,12 @@ function selectComparisonGroup(value: number) {
               class="grid grid-cols-[2rem_1fr_auto] items-center gap-3 p-4 transition hover:bg-elevated/40"
             >
               <span class="text-xs text-muted">{{ index + 1 }}</span>
-              <div class="min-w-0">
-                <p class="truncate font-medium text-highlighted">{{ brand.name }}</p>
-                <p class="text-xs text-muted">原因：Google Trends 搜索热度</p>
+              <div class="flex min-w-0 items-center gap-3">
+                <BrandLogo :brand="brand" size="sm" />
+                <div class="min-w-0">
+                  <p class="truncate font-medium text-highlighted">{{ brand.name }}</p>
+                  <p class="text-xs text-muted">原因：Google Trends 搜索热度</p>
+                </div>
               </div>
               <div class="text-right">
                 <p :class="heatChangeFor(brand.id, changeWindow) < 0 ? 'text-error' : 'text-muted'" class="font-semibold">

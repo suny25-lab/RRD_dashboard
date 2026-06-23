@@ -62,7 +62,7 @@ function stateColor(state: string) {
     <template #body>
       <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div class="flex min-w-0 items-center gap-4">
-          <UAvatar :alt="brand.name" :text="brand.logoText" size="3xl" />
+          <BrandLogo :brand="brand" size="xl" />
           <div class="min-w-0">
             <h1 class="truncate text-2xl font-semibold text-highlighted">
               {{ brand.name }}

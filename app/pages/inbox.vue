@@ -5,6 +5,7 @@ import { messageSummaryCn, messageTitleCn, messageTypeLabel, sourceLabel } from 
 
 const typeFilter = ref('all')
 const selectedMessageId = ref(tcgdb.messages[0]?.id)
+const brandMap = computed(() => new Map(tcgdb.brands.map(brand => [brand.id, brand])))
 
 const typeItems = [{
   label: '全部',
@@ -38,13 +39,6 @@ watch(filteredMessages, () => {
   }
 })
 
-function messageIcon(type: string) {
-  if (type === 'alert') return 'i-lucide-bell-ring'
-  if (type === 'data') return 'i-lucide-database'
-  if (type === 'social') return 'i-lucide-message-circle'
-  return 'i-lucide-newspaper'
-}
-
 function messageColor(type: string) {
   if (type === 'alert') return 'warning'
   if (type === 'data') return 'primary'
@@ -54,6 +48,10 @@ function messageColor(type: string) {
 
 function formatDate(date: string) {
   return format(new Date(date), 'yyyy-MM-dd')
+}
+
+function brandFor(brandId: string) {
+  return brandMap.value.get(brandId)
 }
 </script>
 
@@ -88,7 +86,7 @@ function formatDate(date: string) {
       >
         <div class="flex items-start justify-between gap-3">
           <div class="flex min-w-0 items-start gap-3">
-            <UIcon :name="messageIcon(message.type)" class="mt-0.5 size-4 shrink-0 text-primary" />
+            <BrandLogo :brand="brandFor(message.brandId)" size="sm" />
             <div class="min-w-0">
               <div class="flex items-center gap-2">
                 <p class="truncate font-medium text-highlighted">
@@ -138,7 +136,8 @@ function formatDate(date: string) {
         <p class="text-sm text-muted">
           关联品牌
         </p>
-        <NuxtLink :to="`/customers/${selectedMessage.brandId}`" class="mt-1 inline-flex items-center gap-2 text-xl font-semibold text-highlighted hover:text-primary">
+        <NuxtLink :to="`/customers/${selectedMessage.brandId}`" class="mt-1 inline-flex items-center gap-3 text-xl font-semibold text-highlighted hover:text-primary">
+          <BrandLogo :brand="brandFor(selectedMessage.brandId)" size="sm" />
           {{ selectedMessage.brandName }}
           <UIcon name="i-lucide-arrow-up-right" class="size-4" />
         </NuxtLink>
