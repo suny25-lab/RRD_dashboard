@@ -1,158 +1,74 @@
 <script setup lang="ts">
-import * as z from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui'
-
-const fileRef = ref<HTMLInputElement>()
-
-const profileSchema = z.object({
-  name: z.string().min(2, 'Too short'),
-  email: z.string().email('Invalid email'),
-  username: z.string().min(2, 'Too short'),
-  avatar: z.string().optional(),
-  bio: z.string().optional()
-})
-
-type ProfileSchema = z.output<typeof profileSchema>
-
-const profile = reactive<Partial<ProfileSchema>>({
-  name: 'Benjamin Canac',
-  email: 'ben@nuxtlabs.com',
-  username: 'benjamincanac',
-  avatar: undefined,
-  bio: undefined
-})
-const toast = useToast()
-async function onSubmit(event: FormSubmitEvent<ProfileSchema>) {
-  toast.add({
-    title: 'Success',
-    description: 'Your settings have been updated.',
-    icon: 'i-lucide-check',
-    color: 'success'
-  })
-  console.log(event.data)
-}
-
-function onFileChange(e: Event) {
-  const input = e.target as HTMLInputElement
-
-  if (!input.files?.length) {
-    return
-  }
-
-  profile.avatar = URL.createObjectURL(input.files[0]!)
-}
-
-function onFileClick() {
-  fileRef.value?.click()
-}
+const plannedSources = [{
+  name: 'Google Trends',
+  scope: '51 个 TCG 品牌的美国搜索热度',
+  status: '已接入'
+}, {
+  name: 'TCGplayer',
+  scope: '产品、系列、活跃覆盖以及后续官方价格字段',
+  status: '计划接入'
+}, {
+  name: '官网新闻',
+  scope: '官网新闻与品牌公告',
+  status: '计划接入'
+}, {
+  name: '社媒',
+  scope: '源确认后的官方社媒帖子',
+  status: '预留'
+}, {
+  name: 'eBay',
+  scope: '刊登与评级指标',
+  status: '预留'
+}]
 </script>
 
 <template>
-  <UForm
-    id="settings"
-    :schema="profileSchema"
-    :state="profile"
-    @submit="onSubmit"
-  >
-    <UPageCard
-      title="Profile"
-      description="These informations will be displayed publicly."
-      variant="naked"
-      orientation="horizontal"
-      class="mb-4"
-    >
-      <UButton
-        form="settings"
-        label="Save changes"
-        color="neutral"
-        type="submit"
-        class="w-fit lg:ms-auto"
-      />
-    </UPageCard>
+  <UDashboardPanel id="settings-home">
+    <template #header>
+      <UDashboardNavbar title="数据设置">
+        <template #leading>
+          <UDashboardSidebarCollapse aria-label="收起侧边栏" />
+        </template>
+      </UDashboardNavbar>
+    </template>
 
-    <UPageCard variant="subtle">
-      <UFormField
-        name="name"
-        label="Name"
-        description="Will appear on receipts, invoices, and other communication."
-        required
-        class="flex max-sm:flex-col justify-between items-start gap-4"
-      >
-        <UInput
-          v-model="profile.name"
-          autocomplete="off"
-        />
-      </UFormField>
-      <USeparator />
-      <UFormField
-        name="email"
-        label="Email"
-        description="Used to sign in, for email receipts and product updates."
-        required
-        class="flex max-sm:flex-col justify-between items-start gap-4"
-      >
-        <UInput
-          v-model="profile.email"
-          type="email"
-          autocomplete="off"
-        />
-      </UFormField>
-      <USeparator />
-      <UFormField
-        name="username"
-        label="Username"
-        description="Your unique username for logging in and your profile URL."
-        required
-        class="flex max-sm:flex-col justify-between items-start gap-4"
-      >
-        <UInput
-          v-model="profile.username"
-          type="username"
-          autocomplete="off"
-        />
-      </UFormField>
-      <USeparator />
-      <UFormField
-        name="avatar"
-        label="Avatar"
-        description="JPG, GIF or PNG. 1MB Max."
-        class="flex max-sm:flex-col justify-between sm:items-center gap-4"
-      >
-        <div class="flex flex-wrap items-center gap-3">
-          <UAvatar
-            :src="profile.avatar"
-            :alt="profile.name"
-            size="lg"
-          />
-          <UButton
-            label="Choose"
-            color="neutral"
-            @click="onFileClick"
-          />
-          <input
-            ref="fileRef"
-            type="file"
-            class="hidden"
-            accept=".jpg, .jpeg, .png, .gif"
-            @change="onFileChange"
-          >
+    <template #body>
+      <div class="max-w-5xl space-y-6">
+        <div>
+          <h1 class="text-2xl font-semibold text-highlighted">
+            预留数据配置
+          </h1>
+          <p class="mt-2 text-sm text-muted">
+            本页保留用于数据源映射和关键词配置；首版 MVP 暂不接入可编辑设置。
+          </p>
         </div>
-      </UFormField>
-      <USeparator />
-      <UFormField
-        name="bio"
-        label="Bio"
-        description="Brief description for your profile. URLs are hyperlinked."
-        class="flex max-sm:flex-col justify-between items-start gap-4"
-        :ui="{ container: 'w-full' }"
-      >
-        <UTextarea
-          v-model="profile.bio"
-          :rows="5"
-          autoresize
-          class="w-full"
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <UCard v-for="source in plannedSources" :key="source.name" variant="subtle">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="font-semibold text-highlighted">
+                  {{ source.name }}
+                </h2>
+                <p class="mt-1 text-sm text-muted">
+                  {{ source.scope }}
+                </p>
+              </div>
+              <UBadge :color="source.status === '已接入' ? 'success' : 'neutral'" variant="subtle">
+                {{ source.status }}
+              </UBadge>
+            </div>
+          </UCard>
+        </div>
+
+        <UAlert
+          icon="i-lucide-info"
+          color="neutral"
+          variant="subtle"
+          title="价格源口径"
+          description="后续加入价格时，使用官方 TCGplayer price 字段；当前没有 eBay 数据，不从 eBay 推断价格。"
         />
-      </UFormField>
-    </UPageCard>
-  </UForm>
+      </div>
+    </template>
+  </UDashboardPanel>
 </template>

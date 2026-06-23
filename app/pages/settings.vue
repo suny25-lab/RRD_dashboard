@@ -2,24 +2,24 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
 
 const links = [[{
-  label: 'General',
+  label: '数据源',
   icon: 'i-lucide-user',
   to: '/settings',
   exact: true
 }, {
-  label: 'Members',
+  label: '成员',
   icon: 'i-lucide-users',
   to: '/settings/members'
 }, {
-  label: 'Notifications',
+  label: '通知',
   icon: 'i-lucide-bell',
   to: '/settings/notifications'
 }, {
-  label: 'Security',
+  label: '安全',
   icon: 'i-lucide-shield',
   to: '/settings/security'
 }], [{
-  label: 'Documentation',
+  label: '文档',
   icon: 'i-lucide-book-open',
   to: 'https://ui.nuxt.com/docs/getting-started/installation/nuxt',
   target: '_blank'
@@ -29,14 +29,14 @@ const links = [[{
 <template>
   <UDashboardPanel id="settings" :ui="{ body: 'lg:py-12' }">
     <template #header>
-      <UDashboardNavbar title="Settings">
+      <UDashboardNavbar title="设置">
         <template #leading>
-          <UDashboardSidebarCollapse />
+          <UDashboardSidebarCollapse aria-label="收起侧边栏" />
         </template>
       </UDashboardNavbar>
 
       <UDashboardToolbar>
-        <!-- NOTE: The `-mx-1` class is used to align with the `DashboardSidebarCollapse` button here. -->
+        <!-- Align with the DashboardSidebarCollapse button. -->
         <UNavigationMenu :items="links" highlight class="-mx-1 flex-1" />
       </UDashboardToolbar>
     </template>
