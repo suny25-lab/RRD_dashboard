@@ -1,28 +1,27 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
-const route = useRoute()
 const toast = useToast()
 
 const open = ref(false)
 
 const links = [[{
-  label: 'Home',
-  icon: 'i-lucide-house',
+  label: 'Dashboard',
+  icon: 'i-lucide-chart-no-axes-combined',
   to: '/',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Inbox',
+  label: 'News',
   icon: 'i-lucide-inbox',
   to: '/inbox',
-  badge: '4',
+  badge: '16',
   onSelect: () => {
     open.value = false
   }
 }, {
-  label: 'Customers',
+  label: 'Brands',
   icon: 'i-lucide-users',
   to: '/customers',
   onSelect: () => {
@@ -61,14 +60,16 @@ const links = [[{
     }
   }]
 }], [{
-  label: 'Feedback',
-  icon: 'i-lucide-message-circle',
-  to: 'https://github.com/nuxt-ui-templates/dashboard',
-  target: '_blank'
-}, {
-  label: 'Help & Support',
+  label: 'Data scope',
   icon: 'i-lucide-info',
-  to: 'https://github.com/nuxt-ui-templates/dashboard',
+  to: '/',
+  onSelect: () => {
+    open.value = false
+  }
+}, {
+  label: 'GitHub',
+  icon: 'i-simple-icons-github',
+  to: 'https://github.com/suny25-lab/RRD_dashboard',
   target: '_blank'
 }]] satisfies NavigationMenuItem[][]
 
@@ -78,12 +79,12 @@ const groups = computed(() => [{
   items: links.flat()
 }, {
   id: 'code',
-  label: 'Code',
+  label: 'Repository',
   items: [{
     id: 'source',
-    label: 'View page source',
+    label: 'View repository',
     icon: 'i-simple-icons-github',
-    to: `https://github.com/nuxt-ui-templates/dashboard/blob/main/app/pages${route.path === '/' ? '/index' : route.path}.vue`,
+    to: 'https://github.com/suny25-lab/RRD_dashboard',
     target: '_blank'
   }]
 }])
@@ -95,7 +96,7 @@ onMounted(async () => {
   }
 
   toast.add({
-    title: 'We use first-party cookies to enhance your experience on our website.',
+    title: 'TCGDB keeps display preferences in this browser.',
     duration: 0,
     close: false,
     actions: [{

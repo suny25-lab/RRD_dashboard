@@ -19,7 +19,7 @@
 | Home | TCG 市场总览 Dashboard | 展示 Google Trends 热度排名、市场变化、品牌排名和关键指标 |
 | Inbox | TCG 新闻与社媒消息 | 汇总品牌官网 News、官方推文、社媒动态和待关注消息 |
 | Customers | 51 家关注品牌 | 展示所有关注的 TCG 品牌，点击品牌进入完整品牌详情 |
-| Customer Detail | 品牌详情页 | 展示单个品牌的基础信息、热度、TCGplayer 指标、价格、News/社媒 |
+| Customer Detail | 品牌详情页 | 展示单个品牌的基础信息、热度、TCGplayer 指标、后续官网 price、News/社媒 |
 
 ## Home：当前 Dashboard 总览
 
@@ -61,6 +61,7 @@ Home 页就是目前你做的 Dashboard 主页面，应保留市场热度和市�
 - 所有“热度”都使用 Google Trends 搜索热度。
 - TCGplayer 只提供产品、系列、活跃度和价格信息，不参与热度定义。
 - eBay 当前没有数据，不进入热度口径。
+- 价格后续使用官网/TCGplayer 官方 price 数据，不从缺失的 eBay 数据推断。
 
 ### Home 不需要强制展示
 
@@ -224,10 +225,10 @@ Customers 页面不再表示传统 CRM 客户，而是表示正在跟踪的 51 �
 - eBay 信息没有就隐藏，不做空指标占位。
 - Pokemon 热度过大时，多品牌趋势图使用 6 个一组或相对指数展示。
 
-## 需要你确认的问题
+## 已确认补充口径
 
-1. UI 文案上是否把 `Customers` 改名为 `Brands` / `TCG Brands`，还是保留 Customers 但内容显示品牌？
-2. 品牌详情页是否需要新建独立路由，例如 `/customers/[id]`，点击品牌进入详情？
-3. Inbox 的 News/社媒数据 MVP 是否先用静态示例数据，还是你已经有可导入的 CSV/JSON？
-4. Home 当前 Dashboard 是否以 `TCGDB_dashboard_description.md` 的页面结构为准继续实现？
-5. 51 家品牌是否以现有 `market_temperature_v4_pokemon_merged` 输出里的品牌清单为准？
+1. UI 文案使用 `Brands` / `TCG Brands`，路由可继续保留 `/customers`。
+2. 支持 `/customers/[id]` 和 `/brands/[id]` 两种品牌详情入口。
+3. 价格后续使用官网/TCGplayer 官方 price 数据。
+4. Home 当前 Dashboard 以 `TCGDB_dashboard_description.md` 和 Nuxt 模块描述为准继续实现。
+5. Settings 保留页面，但第一版不接入可编辑数据。
